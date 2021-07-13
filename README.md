@@ -1,4 +1,4 @@
-<h1>weather-dashboard</h1>
+<h1>Weather Dashboard</h1>
 
 <h3>Description</h3>
 A weather application where a user inputs the city and in return they get the current forcast a long with the next 5 day forecast. Localstorage was implemented to store the cities that the user searched for and are displayed as buttons on the left hand side under the search button.
