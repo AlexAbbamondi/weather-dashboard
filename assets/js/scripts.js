@@ -18,14 +18,17 @@ weatherKeys["thunderstorm"] = baseClass + "bolt";
 var today = new Date().toLocaleDateString();
 
 //function to get the value that is in the input inorder to get the current weather
-//implements localstorage and displays what is stored as buttons on the page
-function searchValue(event) {
+function getSearchValue(event) {
   event.preventDefault();
   var display = document.querySelector("#display");
   display.removeAttribute("hidden");
   var searchValue = document.querySelector("#search-value").value;
   getCurrentWeather(searchValue);
+  getLocalStorage(searchValue);
+}
 
+//implements localstorage and displays what is stored as buttons on the page
+function getLocalStorage(searchValue) {
   //Localstorage -- created an array to store all the input values in ---- create buttons with said input values
   var cityArray = [];
   localStorage.setItem("city", JSON.stringify(searchValue));
@@ -34,9 +37,21 @@ function searchValue(event) {
   for (let i = 0; i < cityArray.length; i++) {
     var cityBtn = document.createElement("button");
     cityBtn.setAttribute("class", "city-button");
+
+    cityBtn.setAttribute("id", "cityButton");
+    var cityButton = document.querySelector("#cityButton");
+
     cityBtn.textContent = cityArray[i];
     citySection.append(cityBtn);
   }
+
+  searchValue = document.querySelector("#cityButton").value;
+  
+  cityButton.addEventListener("click", function() {
+    getCurrentWeather(searchValue);
+  });
+
+
 }
 
 //function to get the current weather and all conditions
@@ -83,6 +98,12 @@ function getCurrentWeather(searchValue) {
       humidity.append(data.main.humidity + "%");
     });
 
+  //Send the search value to the getUVIndex function
+  getUvIndex(searchValue);
+}
+
+//Get the uv index for the current day in the selected city
+function getUvIndex(searchValue) {
   //Get the lon and lat of a city from the input
   var geolocationQueryUrl =
     "https://api.openweathermap.org/geo/1.0/direct?q=" +
@@ -164,7 +185,7 @@ function getForecast(lon, lat) {
       for (let i = 1; i < 6; i++) {
         //create elements and set classes
         var forecastDiv = document.createElement("div");
-        forecastDiv.classList = "col-2 bg-dark text-white px-1";
+        forecastDiv.classList = "col-sm-12 m-2 col-md-2 bg-dark text-white";
         var forecastDate = document.createElement("p");
         var temp = document.createElement("p");
         temp.classList = "mt-3";
@@ -205,4 +226,4 @@ function getForecast(lon, lat) {
 }
 
 //click event on search button
-searchBtn.addEventListener("click", searchValue);
+searchBtn.addEventListener("click", getSearchValue);
